@@ -1,15 +1,16 @@
 import numpy as np 
 import pandas as pd 
 import os
+import cv2
 from keras.preprocessing.image import ImageDataGenerator
 
-data_folder = '/home/itsuki/workspace/data'
+data_folder = '/Users/itsuki/data/ice_data'
 
 
 def get_images(data_frame):
     band1 = []
     for item in data_frame.band_1:
-        band1.append(np.array(item).reshape((75, 75)))
+        band1.append(np.array(item).reshape([75, 75]))
 
     band2 = []
     for item in data_frame.band_2:
@@ -22,7 +23,12 @@ def get_images(data_frame):
     band2 = band2[:, :, :, np.newaxis]
     band3 = band3[:, :, :, np.newaxis]
 
-    return np.concatenate((band1, band2, band3), axis=3)
+    images = np.concatenate((band1, band2, band3), axis=3)
+    new_images = []
+    for image in images:
+        new_images.append(cv2.resize(image, (224, 224), interpolation=cv2.INTER_CUBIC))
+    return np.array(new_images)
+
 
 
 def get_angles(data_frame):

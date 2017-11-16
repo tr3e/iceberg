@@ -12,7 +12,7 @@ from keras.utils import plot_model
 from keras.optimizers import Nadam, Adamax, Adam, SGD, RMSprop
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
-from DPN import DPN1
+import dpn
 
 
 train_df = pre.load_data('train.json')
@@ -20,7 +20,7 @@ images = pre.get_images(train_df)
 labels = pre.get_labels(train_df)
 del(train_df)
 
-X_train, X_val, y_train, y_val = train_test_split(images, labels, test_size=0.1, random_state=0)
+X_train, X_val, y_train, y_val = train_test_split(images, labels, test_size=0.2, random_state=0)
 
 img_gen = pre.images_generator()
 print 'Images generator inits completely'
@@ -29,14 +29,14 @@ print images.shape
 print labels.shape
 
 # clf = build_resnet((75, 75, 3), nb_classes=2, N=3, k=2, dropout=0.0, verbose=1)
-clf = DPN1((75, 75, 3))
+clf = dpn.DPN137((224, 224, 3), classes=1)
 print 'Build successfully'
-plot_model(clf, "resnet.png", show_shapes=True, show_layer_names=True)
+# plot_model(clf, "dpn-137.png", show_shapes=False, show_layer_names=True)
 
 # clf = load_model('model_best3.hdf5')
 
 
-optimizer = Adamax(0.2)
+optimizer =Nadam()
 clf.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 print 'Compile successfully'
 
