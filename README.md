@@ -1,1 +1,1 @@
-# resneXt-keras
+# iceberg classification challenge code
