@@ -11,35 +11,36 @@ from keras.models import load_model, Model
 from sklearn.externals import joblib
 from sklearn.utils import shuffle
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '2,3,4,5'
 data_folder = '/home/itsuki/workspace/iceberg/data'
 
-X_train = pre.load_features('../feature/features_train1.npy')
-y_train = pre.load_features('../feature/labels_train1.npy')
-shuffle(X_train, y_train, random_state=14)
-X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=None)
-for i in xrange(2, 100):
-    featrues_file = '../feature/features_train' + str(i) + '.npy'
-    labels_file = '../feature/labels_train' + str(i) + '.npy'
+X = pre.load_features('../feature/features_train.npy')
+y = pre.load_features('../feature/labels_train.npy')
 
-    if os.path.exists(featrues_file):
-        new_X = pre.load_features(featrues_file)
-        new_y = pre.load_features(labels_file)
-        shuffle(new_X, new_y, random_state=14)
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=None)
+# for i in xrange(2, 100):
+#     featrues_file = '../feature/features_train' + str(i) + '.npy'
+#     labels_file = '../feature/labels_train' + str(i) + '.npy'
 
-        new_X, new_X_val, new_y, new_y_val = train_test_split(new_X, new_y, test_size=0.2, random_state=None)
+#     if os.path.exists(featrues_file):
+#         new_X = pre.load_features(featrues_file)
+#         new_y = pre.load_features(labels_file)
+#         shuffle(new_X, new_y, random_state=14)
 
-        X_train = np.concatenate((X_train, new_X), axis=0).astype('float32')
-        y_train = np.concatenate((y_train, new_y), axis=0).astype('float32')
+#         new_X, new_X_val, new_y, new_y_val = train_test_split(new_X, new_y, test_size=0.2, random_state=None)
 
-        X_val = np.concatenate((X_val, new_X_val), axis=0).astype('float32')
-        y_val = np.concatenate((y_val, new_y_val), axis=0).astype('float32')
-    else:
-        print 'no such file:', featrues_file
-        break
+#         X_train = np.concatenate((X_train, new_X), axis=0).astype('float32')
+#         y_train = np.concatenate((y_train, new_y), axis=0).astype('float32')
+
+#         X_val = np.concatenate((X_val, new_X_val), axis=0).astype('float32')
+#         y_val = np.concatenate((y_val, new_y_val), axis=0).astype('float32')
+#     else:
+#         print 'no such file:', featrues_file
+#         break
 
 print X_train.shape, y_train.shape
 
-clf = RandomForestClassifier(n_estimators=1000, max_depth=100, oob_score=True, verbose=10, n_jobs=4, random_state=None)
+clf = RandomForestClassifier(n_estimators=100, max_depth=4, oob_score=True, verbose=10, n_jobs=4, random_state=None)
 
 clf.fit(X_train, y_train)
 

@@ -461,8 +461,8 @@ def _create_dpn(nb_classes, img_input, include_top, initial_conv_filters,
         max = GlobalMaxPooling2D()(x)
         x = add([avg, max])
         x = Lambda(lambda z: 0.5 * z)(x)
-        x = Dense(nb_classes, use_bias=False, kernel_regularizer=l2(weight_decay),
-                  kernel_initializer='he_normal', activation='softmax')(x)
+        x = Dense(nb_classes, use_bias=True, kernel_regularizer=l2(weight_decay),
+                  kernel_initializer='he_normal', activation='sigmoid')(x)
     else:
         if pooling == 'avg':
             x = GlobalAveragePooling2D()(x)

@@ -4,7 +4,7 @@ import os
 import cv2
 from keras.preprocessing.image import ImageDataGenerator
 
-data_folder = '/Users/itsuki/data/ice_data'
+data_folder = '/workspace/lianghan/iceberg/ice_data/'
 
 
 def get_images(data_frame):
